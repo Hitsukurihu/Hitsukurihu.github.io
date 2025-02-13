@@ -79,16 +79,22 @@
       justify-content: space-between;
       align-items: center;
     }
-    /* ★ 新增 display、align-items、gap 以便圖片與文字水平對齊 ★ */
     nav .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px; /* 圖片與文字之間的間距 */
       font-weight: 700;
       font-size: 1.5rem;
       text-shadow: 0 0 8px rgba(100, 255, 180, 0.6);
       white-space: nowrap;
+      /* 建議可加上 display:flex; align-items:center; 讓圖片+文字對齊 */
+      display: flex;
+      align-items: center;
     }
+    /* ★ 在 .logo 中插入圖片時，可自行調整 img 的大小與邊距 */
+    nav .logo img {
+      height: 40px;       /* 圖片高度可自行調整 */
+      margin-right: 10px; /* 與文字的間距 */
+      vertical-align: middle;
+    }
+
     /* 導覽列選單 */
     nav ul {
       list-style: none;
@@ -96,7 +102,6 @@
       gap: 20px;
     }
     nav ul li a {
-      /* 將灰色改為更亮的 #eee，提升對比 */
       color: #eee;  
       text-decoration: none;
       font-weight: 500;
@@ -214,7 +219,6 @@
       border-radius: 5px;
       margin-bottom: 10px;
     }
-    /* 一般段落改為 #eee */
     section p {
       margin-bottom: 10px;
       color: #eee;
@@ -228,7 +232,6 @@
       font-size: 1.2rem;
       color: #fff;
     }
-    /* 次要文字改為 #ddd */
     .sub-section p,
     ul {
       color: #ddd;
@@ -276,7 +279,6 @@
       padding: 20px;
       margin-top: 60px;
     }
-    /* 頁尾文字改為 #eee */
     footer p {
       color: #eee;
       margin-bottom: 5px;
@@ -313,13 +315,16 @@
   <!-- 頂部導覽列 -->
   <header>
     <nav>
-      <!-- ★ 與 index.html 同層級放置 tik-logo.png ★ -->
-      <div class="logo" data-i18n="nav_logo">
-        <img src="tik-logo.png" 
-             alt="TIKTOP Logo" 
-             style="height: 40px;">
-        TIKTOP 幣
+      <!-- ★★★ 以下為修改重點 ★★★
+           將原本 data-i18n="nav_logo" 的文字獨立成 <span>，
+           並在前面加上 <img>。
+      -->
+      <div class="logo">
+        <img src="tik-logo.png" alt="TIKTOP 幣 logo" />
+        <span data-i18n="nav_logo">TIKTOP 幣</span>
       </div>
+      <!-- ★★★ 結束修改 ★★★ -->
+
       <ul>
         <li><a href="#home" data-i18n="nav_home">首頁</a></li>
         <li><a href="#about" data-i18n="nav_about">關於我們</a></li>
@@ -834,7 +839,6 @@
       elementsWithI18n.forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (translation[key]) {
-          // 將翻譯文字寫入該元素
           el.innerHTML = translation[key];
         }
       });
