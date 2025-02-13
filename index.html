@@ -84,22 +84,22 @@
       font-size: 1.5rem;
       text-shadow: 0 0 8px rgba(100, 255, 180, 0.6);
       white-space: nowrap;
-      /* 建議可加上 display:flex; align-items:center; 讓圖片+文字對齊 */
+      /* 保持前面插入圖片 + 文字可並排 */
       display: flex;
       align-items: center;
     }
-    /* ★ 在 .logo 中插入圖片時，可自行調整 img 的大小與邊距 */
     nav .logo img {
       height: 40px;       /* 圖片高度可自行調整 */
       margin-right: 10px; /* 與文字的間距 */
       vertical-align: middle;
     }
 
-    /* 導覽列選單 */
+    /* ★★★ 重點：flex-wrap 避免英文版太長時跑版 ★★★ */
     nav ul {
       list-style: none;
       display: flex;
       gap: 20px;
+      flex-wrap: wrap; /* 允許自動換行 */
     }
     nav ul li a {
       color: #eee;  
@@ -302,9 +302,10 @@
       #banner-text {
         font-size: 1rem;
       }
-      nav ul {
+      /* 小螢幕時，如想隱藏選單改用漢堡，可改這裡 */
+      /* nav ul {
         display: none;
-      }
+      } */
     }
   </style>
 </head>
@@ -315,16 +316,11 @@
   <!-- 頂部導覽列 -->
   <header>
     <nav>
-      <!-- ★★★ 以下為修改重點 ★★★
-           將原本 data-i18n="nav_logo" 的文字獨立成 <span>，
-           並在前面加上 <img>。
-      -->
+      <!-- 將原本 data-i18n="nav_logo" 的文字保留在 <span>，並在前面插入 <img> -->
       <div class="logo">
         <img src="logo.png" alt="TIKTOP 幣 logo" />
         <span data-i18n="nav_logo">TIKTOP 幣</span>
       </div>
-      <!-- ★★★ 結束修改 ★★★ -->
-
       <ul>
         <li><a href="#home" data-i18n="nav_home">首頁</a></li>
         <li><a href="#about" data-i18n="nav_about">關於我們</a></li>
