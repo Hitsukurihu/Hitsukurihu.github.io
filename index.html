@@ -76,49 +76,104 @@
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      /* 讓左中右三區塊 (logo / menu / language) 排列 */
+      justify-content: space-between;
+      position: relative;
     }
-    nav .logo {
+
+    /* LOGO：左側 */
+    .logo {
+      display: flex;
+      align-items: center;
       font-weight: 700;
       font-size: 1.5rem;
       text-shadow: 0 0 8px rgba(100, 255, 180, 0.6);
       white-space: nowrap;
-      /* 保持前面插入圖片 + 文字可並排 */
-      display: flex;
-      align-items: center;
+      flex: 0 0 auto; /* 不要被撐開 */
     }
-    nav .logo img {
-      height: 40px;       /* 圖片高度可自行調整 */
-      margin-right: 10px; /* 與文字的間距 */
+    .logo img {
+      height: 40px;       
+      margin-right: 10px;
       vertical-align: middle;
     }
 
-    /* ★★★ 重點：flex-wrap 避免英文版太長時跑版 ★★★ */
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap; /* 允許自動換行 */
+    /* 漢堡按鈕 (小螢幕時才顯示) */
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #eee;
+      transition: color 0.3s;
+      margin-left: 15px; /* 讓按鈕與選單間有點空隙 */
+      flex: 0 0 auto;
     }
-    nav ul li a {
+    .hamburger:hover {
+      color: #fff;
+    }
+
+    /* 選單：置於 LOGO 與語言切換之間，寬度自動填滿 (桌機) */
+    #navMenu {
+       list-style: none;      /* 移除預設的圓點 */
+       flex: 1 1 auto;
+       display: flex;
+       justify-content: center;
+       gap: 20px;
+       /* 其他設定... */
+
+
+      flex: 1 1 auto;
+      display: flex;       /* 桌機預設顯示 */
+      justify-content: center; /* 內容置中 */
+      gap: 20px;           /* 選單間距 */
+    }
+    #navMenu li a {
       color: #eee;  
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
     }
-    nav ul li a:hover {
+    #navMenu li a:hover {
       color: #fff;
     }
-    /* 語言切換器 (select) */
+
+    /* 語言切換器：位於最右 */
     .lang-switcher {
-      margin-left: 20px;
+      flex: 0 0 auto;
+      margin-left: 15px;
       padding: 5px;
       background: #005554;
       color: #fff;
       border: none;
       border-radius: 4px;
       font-size: 0.9rem;
+    }
+
+    /********************************************
+     * 手機版 (小於768px)
+     ********************************************/
+    @media (max-width: 768px) {
+      /* 顯示漢堡按鈕 */
+      .hamburger {
+        display: block;
+      }
+      /* 選單預設隱藏 */
+      #navMenu {
+        display: none;
+        position: absolute;
+        top: 60px; /* 往下，避免蓋到header */
+        left: 0;
+        right: 0;
+        flex-direction: column; /* 垂直 */
+        gap: 10px;
+        background: rgba(0,0,0,0.8);
+        padding: 20px;
+      }
+      #navMenu.show-menu {
+        display: flex; /* 按下漢堡後顯示 */
+      }
     }
 
     /********************************************
@@ -291,22 +346,6 @@
     footer a:hover {
       color: #64FFDA;
     }
-
-    /********************************************
-     * 響應式 (部分示例)
-     ********************************************/
-    @media (max-width: 768px) {
-      #banner-title {
-        font-size: 2.2rem;
-      }
-      #banner-text {
-        font-size: 1rem;
-      }
-      /* 小螢幕時，如想隱藏選單改用漢堡，可改這裡 */
-      /* nav ul {
-        display: none;
-      } */
-    }
   </style>
 </head>
 <body>
@@ -316,12 +355,14 @@
   <!-- 頂部導覽列 -->
   <header>
     <nav>
-      <!-- 將原本 data-i18n="nav_logo" 的文字保留在 <span>，並在前面插入 <img> -->
+      <!-- 左：LOGO -->
       <div class="logo">
         <img src="logo.png" alt="TIKTOP 幣 logo" />
         <span data-i18n="nav_logo">TIKTOP 幣</span>
       </div>
-      <ul>
+
+      <!-- 中：選單(桌機顯示) + 漢堡(手機才顯示) -->
+      <ul id="navMenu">
         <li><a href="#home" data-i18n="nav_home">首頁</a></li>
         <li><a href="#about" data-i18n="nav_about">關於我們</a></li>
         <li><a href="#distribution" data-i18n="nav_distribution">代幣分配</a></li>
@@ -333,7 +374,9 @@
         <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
         <li><a href="#contact" data-i18n="nav_contact">聯繫</a></li>
       </ul>
-      <!-- 語言切換器 -->
+      <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+
+      <!-- 右：語言切換器 -->
       <select class="lang-switcher" id="langSwitcher">
         <option value="zh-tw">繁體中文</option>
         <option value="zh-cn" selected>简体中文</option>
@@ -549,6 +592,14 @@
         content.style.display = (content.style.display === 'block') ? 'none' : 'block';
       });
     });
+
+    /**********************************************************
+     * 漢堡選單切換
+     **********************************************************/
+    function toggleMenu() {
+      const navMenu = document.getElementById('navMenu');
+      navMenu.classList.toggle('show-menu');
+    }
 
     /**********************************************************
      * 多語系翻譯
