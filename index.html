@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="page_title">TIKTOP 币 | 官方形象网站</title>
+  <!-- Google Fonts 或其他字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /********************************************
+     * 基本重置與字體設定
+     ********************************************/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      color: #fff; /* 採用亮字 */
+      background-color: #043B3C; /* 深海底色，可視需求再調 */
+      overflow-x: hidden; /* 隱藏水平捲軸 */
+    }
+
+    /********************************************
+     * 海洋漸層 + 生命光感（底層）
+     ********************************************/
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at top center, 
+                        rgba(130, 220, 180, 0.35) 0%, 
+                        rgba(4, 59, 60, 0) 50%),
+        linear-gradient(to bottom, 
+                       rgba(38, 198, 218, 0.5) 0%, 
+                       rgba(4, 59, 60, 1) 100%);
+      background-blend-mode: screen;
+      z-index: -3; /* 最底層 */
+    }
+
+    /********************************************
+     * Canvas 泡泡動畫 (第二層)
+     ********************************************/
+    #bubblefield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -2; /* 第二層 */
+    }
+
+    /********************************************
+     * 頂部導覽列
+     ********************************************/
+    header {
+      background: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* ★ 新增 display、align-items、gap 以便圖片與文字水平對齊 ★ */
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px; /* 圖片與文字之間的間距 */
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-shadow: 0 0 8px rgba(100, 255, 180, 0.6);
+      white-space: nowrap;
+    }
+    /* 導覽列選單 */
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      /* 將灰色改為更亮的 #eee，提升對比 */
+      color: #eee;  
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #fff;
+    }
+    /* 語言切換器 (select) */
+    .lang-switcher {
+      margin-left: 20px;
+      padding: 5px;
+      background: #005554;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    /********************************************
+     * Banner 區域
+     ********************************************/
+    #home {
+      position: relative; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px;
+      overflow: hidden; 
+      text-align: center;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 160, 140, 0.4),
+        rgba(38, 198, 218, 0.2)
+      );
+      animation: oceanGradient 10s ease infinite alternate;
+    }
+    @keyframes oceanGradient {
+      0% {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 160, 140, 0.4),
+          rgba(38, 198, 218, 0.2)
+        );
+      }
+      100% {
+        background: linear-gradient(
+          135deg,
+          rgba(38, 198, 218, 0.4),
+          rgba(0, 160, 140, 0.4)
+        );
+      }
+    }
+    #banner-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      max-width: 800px;
+      text-shadow: 0 0 15px rgba(100, 255, 180, 0.7);
+    }
+    #banner-text {
+      font-size: 1.25rem;
+      max-width: 800px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    .btns {
+      display: flex;
+      gap: 20px;
+    }
+    .btns a {
+      background: linear-gradient(90deg, #26C6DA 0%, #64FFDA 100%);
+      color: #003333;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(100, 255, 180, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btns a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(100, 255, 180, 0.6);
+      color: #00221F;
+    }
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: -1;           
+      pointer-events: none;
+    }
+
+    /********************************************
+     * 內容區塊通用樣式
+     ********************************************/
+    section {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px rgba(100, 255, 180, 0.7);
+      position: relative;
+    }
+    section h2::before {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 5px;
+      background: linear-gradient(90deg, #26C6DA, #64FFDA);
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    /* 一般段落改為 #eee */
+    section p {
+      margin-bottom: 10px;
+      color: #eee;
+      line-height: 1.6;
+    }
+    .sub-section {
+      margin-top: 20px;
+    }
+    .sub-section h3 {
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+    /* 次要文字改為 #ddd */
+    .sub-section p,
+    ul {
+      color: #ddd;
+    }
+    ul {
+      margin: 10px 0 10px 20px;
+      list-style: disc;
+    }
+    strong {
+      color: #fff;
+    }
+
+    /********************************************
+     * FAQ 區塊
+     ********************************************/
+    .faq-item {
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .faq-item h4 {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      margin: 0;
+      font-size: 1rem;
+    }
+    .faq-item h4:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .faq-item p {
+      display: none;
+      padding: 10px;
+      margin: 0;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    /********************************************
+     * 頁尾
+     ********************************************/
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
+    }
+    /* 頁尾文字改為 #eee */
+    footer p {
+      color: #eee;
+      margin-bottom: 5px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+      transition: color 0.3s;
+    }
+    footer a:hover {
+      color: #64FFDA;
+    }
+
+    /********************************************
+     * 響應式 (部分示例)
+     ********************************************/
+    @media (max-width: 768px) {
+      #banner-title {
+        font-size: 2.2rem;
+      }
+      #banner-text {
+        font-size: 1rem;
+      }
+      nav ul {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ★ Canvas 泡泡動畫 (第二層) ★ -->
+  <canvas id="bubblefield"></canvas>
+
+  <!-- 頂部導覽列 -->
+  <header>
+    <nav>
+      <!-- ★ 新增圖片至 logo 區域 ★ -->
+      <div class="logo" data-i18n="nav_logo">
+        <img src="images/tik-logo.png" 
+             alt="TIKTOP Logo" 
+             style="height: 40px;">
+        TIKTOP 幣
+      </div>
+      <ul>
+        <li><a href="#home" data-i18n="nav_home">首頁</a></li>
+        <li><a href="#about" data-i18n="nav_about">關於我們</a></li>
+        <li><a href="#distribution" data-i18n="nav_distribution">代幣分配</a></li>
+        <li><a href="#technology" data-i18n="nav_technology">技術優勢</a></li>
+        <li><a href="#usecases" data-i18n="nav_usecases">應用場景</a></li>
+        <li><a href="#roadmap" data-i18n="nav_roadmap">路線圖</a></li>
+        <li><a href="#team" data-i18n="nav_team">團隊</a></li>
+        <li><a href="#community" data-i18n="nav_community">社群</a></li>
+        <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">聯繫</a></li>
+      </ul>
+      <!-- 語言切換器 -->
+      <select class="lang-switcher" id="langSwitcher">
+        <option value="zh-tw">繁體中文</option>
+        <option value="zh-cn" selected>简体中文</option>
+        <option value="en">English</option>
+      </select>
+    </nav>
+  </header>
+
+  <!-- 首頁區域（Banner） -->
+  <section id="home">
+    <h1 id="banner-title" data-i18n="banner_title">TIKTOP 幣：鏈接未來，創造多元價值！</h1>
+    <p id="banner-text" data-i18n="banner_text">
+      基於區塊鏈技術，致力於提供快速、安全且多元應用的加密貨幣。  
+      讓每一位使用者都能參與去中心化生態，透過創新技術創造更多價值。
+    </p>
+    <div class="btns">
+      <a href="#about" data-i18n="banner_btn_learn">立即了解 TIKTOP 幣</a>
+      <a href="#community" data-i18n="banner_btn_join">加入社群</a>
+    </div>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+      <path
+        fill="#036666"
+        fill-opacity="1"
+        d="M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,165.3C672,139,768,117,864,133.3C960,149,1056,203,1152,202.7C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+      ></path>
+    </svg>
+  </section>
+
+  <!-- 關於 TIKTOP 幣 -->
+  <section id="about">
+    <h2 data-i18n="about_title">關於 TIKTOP 幣</h2>
+    <p data-i18n="about_text">
+      TIKTOP 幣是一種基於先進區塊鏈技術的加密貨幣，總量固定為
+      <strong>1 億顆</strong>，透過智能合約維持去中心化運作。
+      致力於為開發者、投資者與一般用戶提供一個透明、公平且高效的生態系統，
+      同時推動更多應用場景的落地。
+    </p>
+    <div class="sub-section">
+      <p><strong data-i18n="about_core_features_title">核心特點：</strong></p>
+      <ul>
+        <li data-i18n="about_core_features_1">高速交易：提供高交易速度與極低手續費。</li>
+        <li data-i18n="about_core_features_2">安全可靠：去中心化技術與智能合約保證透明度與安全性。</li>
+        <li data-i18n="about_core_features_3">應用廣泛：可用於支付、抵押挖礦、DApp 合作等。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 代幣分配 -->
+  <section id="distribution">
+    <h2 data-i18n="distribution_title">代幣分配</h2>
+    <p data-i18n="distribution_text">
+      為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配遵循以下原則：
+    </p>
+    <div class="sub-section">
+      <h3 data-i18n="distribution_team_title">團隊（Team）：10% - 20%</h3>
+      <p data-i18n="distribution_team_text">
+        用於激勵核心成員與開發者，確保項目的長期推進與穩定運營。  
+        採用分階段解鎖機制，避免對市場造成過度壓力。
+      </p>
+    </div>
+    <div class="sub-section">
+      <h3 data-i18n="distribution_investors_title">投資者（Investors）：40% - 60%</h3>
+      <p data-i18n="distribution_investors_text">
+        ICO 或私募階段釋放的份額，提供投資者參與機會。  
+        保持適度流通性，以形成健康的交易生態。
+      </p>
+    </div>
+    <div class="sub-section">
+      <h3 data-i18n="distribution_ecofund_title">生態基金（Ecosystem Fund）：10% - 30%</h3>
+      <p data-i18n="distribution_ecofund_text">
+        用於支持長期技術研發、運營及合作夥伴激勵，並持續推動  
+        新應用場景開發及全球推廣活動。
+      </p>
+    </div>
+    <p><strong data-i18n="distribution_total">總發行量：1 億顆 TIKTOP 幣</strong></p>
+  </section>
+
+  <!-- 技術優勢 -->
+  <section id="technology">
+    <h2 data-i18n="technology_title">技術優勢</h2>
+    <ul>
+      <li data-i18n="technology_1">
+        <strong>智能合約：</strong>基於安全、高效的智能合約框架，
+        能快速開發及部署去中心化應用。
+      </li>
+      <li data-i18n="technology_2">
+        <strong>可擴展性：</strong>採用 Binance Smart Chain 解決方案， 
+        確保高交易量時仍維持高速與低費用的特性。
+      </li>
+      <li data-i18n="technology_3">
+        <strong>隱私保護：</strong>支援敏感資訊加密存儲與選擇性公開，  
+        兼顧透明度與用戶隱私。
+      </li>
+    </ul>
+  </section>
+
+  <!-- 應用場景 -->
+  <section id="usecases">
+    <h2 data-i18n="usecases_title">應用場景</h2>
+    <ul>
+      <li data-i18n="usecases_1">支付與轉帳：適合作為跨境支付或日常交易工具。</li>
+      <li data-i18n="usecases_2">去中心化金融（DeFi）：可用於質押挖礦、借貸、流動性挖礦等多樣化協議。</li>
+      <li data-i18n="usecases_3">NFT 與遊戲：與遊戲或 NFT 平台合作，作為遊戲道具或 NFT 的交易媒介。</li>
+      <li data-i18n="usecases_4">生態激勵：協助合作夥伴發展 TIKTOP 生態，激勵用戶參與活動。</li>
+    </ul>
+  </section>
+
+  <!-- 發展路線圖 -->
+  <section id="roadmap">
+    <h2 data-i18n="roadmap_title">發展路線圖</h2>
+    <div class="sub-section">
+      <h3 data-i18n="roadmap_q1q2_title">Q1 - Q2</h3>
+      <ul>
+        <li data-i18n="roadmap_q1q2_1">完成核心區塊鏈協議優化</li>
+        <li data-i18n="roadmap_q1q2_2">公布團隊及合作夥伴名單</li>
+        <li data-i18n="roadmap_q1q2_3">上架第一批交易所</li>
+      </ul>
+    </div>
+    <div class="sub-section">
+      <h3 data-i18n="roadmap_q3q4_title">Q3 - Q4</h3>
+      <ul>
+        <li data-i18n="roadmap_q3q4_1">推出 TIKTOP 專屬去中心化錢包</li>
+        <li data-i18n="roadmap_q3q4_2">與多家去中心化金融平台合作</li>
+        <li data-i18n="roadmap_q3q4_3">啟動跨鏈功能測試（橋接其他公鏈）</li>
+      </ul>
+    </div>
+    <div class="sub-section">
+      <h3 data-i18n="roadmap_nextyear_title">次年</h3>
+      <ul>
+        <li data-i18n="roadmap_nextyear_1">全面升級 BEP-20 解決方案，提高交易速度與可擴充性</li>
+        <li data-i18n="roadmap_nextyear_2">拓展更多區域的市場推廣</li>
+        <li data-i18n="roadmap_nextyear_3">與遊戲、NFT、元宇宙等領域加強合作，擴大應用場景</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 團隊介紹 -->
+  <section id="team">
+    <h2 data-i18n="team_title">團隊介紹</h2>
+    <p data-i18n="team_text">
+      我們的核心團隊由區塊鏈工程師、密碼學專家以及金融背景的專業人士組成，
+      顧問團則包含資深區塊鏈投資者、法規顧問和加密行業意見領袖，
+      共同推動 TIKTOP 幣的戰略規劃與市場開拓。
+    </p>
+  </section>
+
+  <!-- 社群與支持 -->
+  <section id="community">
+    <h2 data-i18n="community_title">社群與支持</h2>
+    <p data-i18n="community_text">
+      加入官方社群，獲取最新公告、技術分享及定期 AMA 機會：
+    </p>
+    <ul>
+      <li data-i18n="community_list_1">Telegram / WeChat / Discord / Twitter / Facebook / Medium</li>
+      <li data-i18n="community_list_3">
+        客服信箱： <a href="mailto:info@tiktop.io" style="color:#fff;">info@tiktop.io</a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 data-i18n="faq_title">常見問題</h2>
+    <div class="faq-item">
+      <h4 data-i18n="faq_q1">1. TIKTOP 幣是基於哪條公鏈？</h4>
+      <p data-i18n="faq_a1">目前基於 Binance Smart Chain 協議 (BEP-20)，後續將探索更多跨鏈機制。</p>
+    </div>
+    <div class="faq-item">
+      <h4 data-i18n="faq_q2">2. 如何購買 TIKTOP 幣？</h4>
+      <p data-i18n="faq_a2">可於官方公告的交易所，或參與 ICO/私募階段取得。</p>
+    </div>
+    <div class="faq-item">
+      <h4 data-i18n="faq_q3">3. 持有 TIKTOP 幣有哪些用途？</h4>
+      <p data-i18n="faq_a3">
+        可用於交易、抵押挖礦、支付平台費用等；亦可在未來 DApp 場景或其他合作  
+        項目中使用。
+      </p>
+    </div>
+  </section>
+
+  <!-- 聯繫我們 -->
+  <section id="contact">
+    <h2 data-i18n="contact_title">聯繫我們</h2>
+    <p>
+      <span data-i18n="contact_website_label">官方網站：</span>
+      <a href="https://www.tiktop.io" target="_blank" style="color:#fff;">
+        <span data-i18n="contact_website">https://www.tiktop.io</span>
+      </a>
+      <br/>
+      <span data-i18n="contact_email_label">電子郵件：</span>
+      <a href="mailto:info@tiktop.io" style="color:#fff;">
+        <span data-i18n="contact_email">info@tiktop.io</span>
+      </a>
+    </p>
+  </section>
+
+  <!-- 頁尾 -->
+  <footer>
+    <p data-i18n="footer_copyright">
+      &copy; 2025 TIKTOP 幣. 保留所有權利.
+    </p>
+    <p><a href="#home" data-i18n="footer_back_to_top">返回頂部</a></p>
+  </footer>
+
+  <script>
+    /**********************************************************
+     * FAQ 開合功能
+     **********************************************************/
+    const faqHeaders = document.querySelectorAll('.faq-item h4');
+    faqHeaders.forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+      });
+    });
+
+    /**********************************************************
+     * 多語系翻譯
+     **********************************************************/
+    const translations = {
+      "zh-tw": {
+        "page_title": "TIKTOP 幣 | 官方形象網站",
+        /* NAV */
+        "nav_logo": "TIKTOP 幣",
+        "nav_home": "首頁",
+        "nav_about": "關於我們",
+        "nav_distribution": "代幣分配",
+        "nav_technology": "技術優勢",
+        "nav_usecases": "應用場景",
+        "nav_roadmap": "路線圖",
+        "nav_team": "團隊",
+        "nav_community": "社群",
+        "nav_faq": "FAQ",
+        "nav_contact": "聯繫",
+        /* Banner */
+        "banner_title": "TIKTOP 幣：鏈接未來，創造多元價值！",
+        "banner_text": "基於區塊鏈技術，致力於提供快速、安全且多元應用的加密貨幣。 讓每一位使用者都能參與去中心化生態，透過創新技術創造更多價值。",
+        "banner_btn_learn": "立即了解 TIKTOP 幣",
+        "banner_btn_join": "加入社群",
+        /* About */
+        "about_title": "關於 TIKTOP 幣",
+        "about_text": "TIKTOP 幣是一種基於先進區塊鏈技術的加密貨幣，總量固定為 <strong>1 億顆</strong>，透過智能合約維持去中心化運作。 致力於為開發者、投資者與一般用戶提供一個透明、公平且高效的生態系統， 同時推動更多應用場景的落地。",
+        "about_core_features_title": "核心特點：",
+        "about_core_features_1": "高速交易：提供高交易速度與極低手續費。",
+        "about_core_features_2": "安全可靠：去中心化技術與智能合約保證透明度與安全性。",
+        "about_core_features_3": "應用廣泛：可用於支付、抵押挖礦、DApp 合作等。",
+        /* Distribution */
+        "distribution_title": "代幣分配",
+        "distribution_text": "為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配遵循以下原則：",
+        "distribution_team_title": "團隊（Team）：10% - 20%",
+        "distribution_team_text": "用於激勵核心成員與開發者，確保項目的長期推進與穩定運營。 採用分階段解鎖機制，避免對市場造成過度壓力。",
+        "distribution_investors_title": "投資者（Investors）：40% - 60%",
+        "distribution_investors_text": "ICO 或私募階段釋放的份額，提供投資者參與機會。 保持適度流通性，以形成健康的交易生態。",
+        "distribution_ecofund_title": "生態基金（Ecosystem Fund）：10% - 30%",
+        "distribution_ecofund_text": "用於支持長期技術研發、運營及合作夥伴激勵，並持續推動 新應用場景開發及全球推廣活動。",
+        "distribution_total": "總發行量：1 億顆 TIKTOP 幣",
+        /* Technology */
+        "technology_title": "技術優勢",
+        "technology_1": "<strong>智能合約：</strong>基於安全、高效的智能合約框架， 能快速開發及部署去中心化應用。",
+        "technology_2": "<strong>可擴展性：</strong>採用 Binance Smart Chain 解決方案， 確保高交易量時仍維持高速與低費用的特性。",
+        "technology_3": "<strong>隱私保護：</strong>支援敏感資訊加密存儲與選擇性公開， 兼顧透明度與用戶隱私。",
+        /* Use Cases */
+        "usecases_title": "應用場景",
+        "usecases_1": "支付與轉帳：適合作為跨境支付或日常交易工具。",
+        "usecases_2": "去中心化金融（DeFi）：可用於質押挖礦、借貸、流動性挖礦等多樣化協議。",
+        "usecases_3": "NFT 與遊戲：與遊戲或 NFT 平台合作，作為遊戲道具或 NFT 的交易媒介。",
+        "usecases_4": "生態激勵：協助合作夥伴發展 TIKTOP 生態，激勵用戶參與活動。",
+        /* Roadmap */
+        "roadmap_title": "發展路線圖",
+        "roadmap_q1q2_title": "Q1 - Q2",
+        "roadmap_q1q2_1": "完成核心區塊鏈協議優化",
+        "roadmap_q1q2_2": "公布團隊及合作夥伴名單",
+        "roadmap_q1q2_3": "上架第一批交易所",
+        "roadmap_q3q4_title": "Q3 - Q4",
+        "roadmap_q3q4_1": "推出 TIKTOP 專屬去中心化錢包",
+        "roadmap_q3q4_2": "與多家去中心化金融平台合作",
+        "roadmap_q3q4_3": "啟動跨鏈功能測試（橋接其他公鏈）",
+        "roadmap_nextyear_title": "次年",
+        "roadmap_nextyear_1": "全面升級 BEP-20 解決方案，提高交易速度與可擴充性",
+        "roadmap_nextyear_2": "拓展更多區域的市場推廣",
+        "roadmap_nextyear_3": "與遊戲、NFT、元宇宙等領域加強合作，擴大應用場景",
+        /* Team */
+        "team_title": "團隊介紹",
+        "team_text": "我們的核心團隊由區塊鏈工程師、密碼學專家以及金融背景的專業人士組成， 顧問團則包含資深區塊鏈投資者、法規顧問和加密行業意見領袖， 共同推動 TIKTOP 幣的戰略規劃與市場開拓。",
+        /* Community */
+        "community_title": "社群與支持",
+        "community_text": "加入官方社群，獲取最新公告、技術分享及定期 AMA 機會：",
+        "community_list_1": "Telegram / WeChat / Discord / Twitter / Facebook / Medium",
+        "community_list_3": "客服信箱：",
+        /* FAQ */
+        "faq_title": "常見問題",
+        "faq_q1": "1. TIKTOP 幣是基於哪條公鏈？",
+        "faq_a1": "目前基於 Binance Smart Chain 協議 (BEP-20)，後續將探索更多跨鏈機制。",
+        "faq_q2": "2. 如何購買 TIKTOP 幣？",
+        "faq_a2": "可於官方公告的交易所，或參與 ICO/私募階段取得。",
+        "faq_q3": "3. 持有 TIKTOP 幣有哪些用途？",
+        "faq_a3": "可用於交易、抵押挖礦、支付平台費用等；亦可在未來 DApp 場景或其他合作 項目中使用。",
+        /* Contact */
+        "contact_title": "聯繫我們",
+        "contact_website_label": "官方網站：",
+        "contact_website": "https://www.tiktop.io",
+        "contact_email_label": "電子郵件：",
+        "contact_email": "info@tiktop.io",
+        /* Footer */
+        "footer_back_to_top": "返回頂部",
+        "footer_copyright": "© 2025 TIKTOP 幣. 保留所有權利."
+      },
+      "zh-cn": {
+        "page_title": "TIKTOP 币 | 官方形象网站",
+        /* NAV */
+        "nav_logo": "TIKTOP 币",
+        "nav_home": "首页",
+        "nav_about": "关于我们",
+        "nav_distribution": "代币分配",
+        "nav_technology": "技术优势",
+        "nav_usecases": "应用场景",
+        "nav_roadmap": "路线图",
+        "nav_team": "团队",
+        "nav_community": "社群",
+        "nav_faq": "FAQ",
+        "nav_contact": "联系",
+        /* Banner */
+        "banner_title": "TIKTOP 币：链接未来，创造多元价值！",
+        "banner_text": "基于区块链技术，致力于提供快速、安全且多元应用的加密货币。 让每一位使用者都能参与去中心化生态，通过创新技术创造更多价值。",
+        "banner_btn_learn": "立即了解 TIKTOP 币",
+        "banner_btn_join": "加入社群",
+        /* About */
+        "about_title": "关于 TIKTOP 币",
+        "about_text": "TIKTOP 币是一种基于先进区块链技术的加密货币，总量固定为 <strong>1 亿枚</strong>，通过智能合约维持去中心化运作。 致力于为开发者、投资者与普通用户提供一个透明、公平且高效的生态系统， 同时推动更多应用场景的落地。",
+        "about_core_features_title": "核心特点：",
+        "about_core_features_1": "高速交易：提供高交易速度与极低手续费。",
+        "about_core_features_2": "安全可靠：去中心化技术与智能合约保证透明度与安全性。",
+        "about_core_features_3": "应用广泛：可用于支付、抵押挖矿、DApp 合作等。",
+        /* Distribution */
+        "distribution_title": "代币分配",
+        "distribution_text": "为了确保生态系统健康与可持续发展，TIKTOP 币的代币分配遵循以下原则：",
+        "distribution_team_title": "团队（Team）：10% - 20%",
+        "distribution_team_text": "用于激励核心成员与开发者，确保项目的长期推进与稳定运营。 采用分阶段解锁机制，避免对市场造成过度压力。",
+        "distribution_investors_title": "投资者（Investors）：40% - 60%",
+        "distribution_investors_text": "ICO 或私募阶段释放的份额，提供投资者参与机会。 保持适度流通性，以形成健康的交易生态。",
+        "distribution_ecofund_title": "生态基金（Ecosystem Fund）：10% - 30%",
+        "distribution_ecofund_text": "用于支持长期技术研发、运营及合作伙伴激励，并持续推动 新应用场景开发及全球推广活动。",
+        "distribution_total": "总发行量：1 亿枚 TIKTOP 币",
+        /* Technology */
+        "technology_title": "技术优势",
+        "technology_1": "<strong>智能合约：</strong>基于安全、高效的智能合约框架， 能快速开发及部署去中心化应用。",
+        "technology_2": "<strong>可扩展性：</strong>采用 Binance Smart Chain 解决方案， 确保高交易量时仍维持高速与低费用的特性。",
+        "technology_3": "<strong>隐私保护：</strong>支持敏感信息加密存储与选择性公开， 兼顾透明度与用户隐私。",
+        /* Use Cases */
+        "usecases_title": "应用场景",
+        "usecases_1": "支付与转账：适合作为跨境支付或日常交易工具。",
+        "usecases_2": "去中心化金融（DeFi）：可用于抵押挖矿、借贷、流动性挖矿等多样化协议。",
+        "usecases_3": "NFT 与游戏：与游戏或 NFT 平台合作，作为游戏道具或 NFT 的交易媒介。",
+        "usecases_4": "生态激励：协助合作伙伴发展 TIKTOP 生态，激励用户参与活动。",
+        /* Roadmap */
+        "roadmap_title": "发展路线图",
+        "roadmap_q1q2_title": "Q1 - Q2",
+        "roadmap_q1q2_1": "完成核心区块链协议优化",
+        "roadmap_q1q2_2": "公布团队及合作伙伴名单",
+        "roadmap_q1q2_3": "上线第一批交易所",
+        "roadmap_q3q4_title": "Q3 - Q4",
+        "roadmap_q3q4_1": "推出 TIKTOP 专属去中心化钱包",
+        "roadmap_q3q4_2": "与多家去中心化金融平台合作",
+        "roadmap_q3q4_3": "启动跨链功能测试（对接其他公链）",
+        "roadmap_nextyear_title": "次年",
+        "roadmap_nextyear_1": "全面升级 BEP-20 解决方案，提高交易速度与可扩展性",
+        "roadmap_nextyear_2": "拓展更多地区的市场推广",
+        "roadmap_nextyear_3": "与游戏、NFT、元宇宙等领域加强合作，扩大应用场景",
+        /* Team */
+        "team_title": "团队介绍",
+        "team_text": "我们的核心团队由区块链工程师、密码学专家以及金融背景的专业人士组成， 顾问团则包含资深区块链投资者、法规顾问和加密行业意见领袖， 共同推动 TIKTOP 币的战略规划与市场开拓。",
+        /* Community */
+        "community_title": "社群与支持",
+        "community_text": "加入官方社群，获取最新公告、技术分享及定期 AMA 机会：",
+        "community_list_1": "Telegram / WeChat / Discord / Twitter / Facebook / Medium",
+        "community_list_3": "客服信箱：",
+        /* FAQ */
+        "faq_title": "常见问题",
+        "faq_q1": "1. TIKTOP 币是基于哪条公链？",
+        "faq_a1": "目前基于 Binance Smart Chain 协议 (BEP-20)，后续将探索更多跨链机制。",
+        "faq_q2": "2. 如何购买 TIKTOP 币？",
+        "faq_a2": "可于官方公告的交易所，或参与 ICO/私募阶段获得。",
+        "faq_q3": "3. 持有 TIKTOP 币有哪些用途？",
+        "faq_a3": "可用于交易、抵押挖矿、支付平台费用等；亦可在未来 DApp 场景或其他合作 项目中使用。",
+        /* Contact */
+        "contact_title": "联系我们",
+        "contact_website_label": "官方网站：",
+        "contact_website": "https://www.tiktop.io",
+        "contact_email_label": "电子邮件：",
+        "contact_email": "info@tiktop.io",
+        /* Footer */
+        "footer_back_to_top": "返回顶部",
+        "footer_copyright": "© 2025 TIKTOP 币. 保留所有权利."
+      },
+      "en": {
+        "page_title": "TIKTOP Token | Official Website",
+        /* NAV */
+        "nav_logo": "TIKTOP Token",
+        "nav_home": "Home",
+        "nav_about": "About",
+        "nav_distribution": "Token Distribution",
+        "nav_technology": "Technology",
+        "nav_usecases": "Use Cases",
+        "nav_roadmap": "Roadmap",
+        "nav_team": "Team",
+        "nav_community": "Community",
+        "nav_faq": "FAQ",
+        "nav_contact": "Contact",
+        /* Banner */
+        "banner_title": "TIKTOP Token: Connect the Future, Create Diverse Value!",
+        "banner_text": "Based on blockchain technology, dedicated to providing a fast, secure, and versatile cryptocurrency. Allow every user to participate in a decentralized ecosystem and create more value through innovation.",
+        "banner_btn_learn": "Learn More About TIKTOP",
+        "banner_btn_join": "Join Community",
+        /* About */
+        "about_title": "About TIKTOP",
+        "about_text": "TIKTOP Token is a cryptocurrency based on advanced blockchain technology, with a total supply of <strong>100 million</strong> tokens. It maintains decentralized operations via smart contracts. We aim to provide a transparent, fair, and efficient ecosystem for developers, investors, and everyday users, while driving the adoption of more application scenarios.",
+        "about_core_features_title": "Key Features:",
+        "about_core_features_1": "High-speed transactions: offering high throughput and ultra-low fees.",
+        "about_core_features_2": "Secure & Reliable: decentralized technology and smart contracts ensure transparency and security.",
+        "about_core_features_3": "Broad Utility: usable for payments, staking, and various DApp collaborations.",
+        /* Distribution */
+        "distribution_title": "Token Distribution",
+        "distribution_text": "To ensure a healthy and sustainable ecosystem, TIKTOP’s token distribution follows these principles:",
+        "distribution_team_title": "Team: 10% - 20%",
+        "distribution_team_text": "Allocated to incentivize core members and developers, ensuring the long-term progress of the project. Implement a vesting schedule to avoid excessive market pressure.",
+        "distribution_investors_title": "Investors: 40% - 60%",
+        "distribution_investors_text": "Released during ICO or private sales, providing opportunities for investors. Maintain appropriate liquidity for a healthy trading environment.",
+        "distribution_ecofund_title": "Ecosystem Fund: 10% - 30%",
+        "distribution_ecofund_text": "Supports long-term R&D, operations, and partner incentives, continuously fostering new application scenarios and global promotion.",
+        "distribution_total": "Total Supply: 100 million TIKTOP",
+        /* Technology */
+        "technology_title": "Technology",
+        "technology_1": "<strong>Smart Contracts:</strong> built on a secure and efficient framework, enabling rapid development and deployment of decentralized apps.",
+        "technology_2": "<strong>Scalability:</strong> leveraging Binance Smart Chain solutions to ensure high speed and low fees even under heavy transaction loads.",
+        "technology_3": "<strong>Privacy Protection:</strong> supporting encrypted storage of sensitive data with optional disclosure, balancing transparency and privacy.",
+        /* Use Cases */
+        "usecases_title": "Use Cases",
+        "usecases_1": "Payments & Transfers: suitable for cross-border payments or daily transactions.",
+        "usecases_2": "DeFi: applicable to staking, lending, liquidity mining, and diverse DeFi protocols.",
+        "usecases_3": "NFT & Gaming: partner with gaming or NFT platforms as a medium for in-game items or NFT trading.",
+        "usecases_4": "Ecosystem Incentives: help partners develop the TIKTOP ecosystem and reward users for participation.",
+        /* Roadmap */
+        "roadmap_title": "Roadmap",
+        "roadmap_q1q2_title": "Q1 - Q2",
+        "roadmap_q1q2_1": "Complete core blockchain protocol optimization",
+        "roadmap_q1q2_2": "Announce team and partners",
+        "roadmap_q1q2_3": "List on the first batch of exchanges",
+        "roadmap_q3q4_title": "Q3 - Q4",
+        "roadmap_q3q4_1": "Launch TIKTOP’s dedicated decentralized wallet",
+        "roadmap_q3q4_2": "Collaborate with multiple DeFi platforms",
+        "roadmap_q3q4_3": "Begin cross-chain testing (bridging other blockchains)",
+        "roadmap_nextyear_title": "Next Year",
+        "roadmap_nextyear_1": "Comprehensively upgrade BEP-20 solutions, improving speed and scalability",
+        "roadmap_nextyear_2": "Expand marketing to more global regions",
+        "roadmap_nextyear_3": "Enhance partnerships in gaming, NFTs, and the metaverse to broaden use cases",
+        /* Team */
+        "team_title": "Our Team",
+        "team_text": "Our core team is composed of blockchain engineers, cryptography experts, and finance professionals, along with advisors who are seasoned blockchain investors, regulatory experts, and thought leaders in the crypto industry, jointly driving TIKTOP’s strategy and market growth.",
+        /* Community */
+        "community_title": "Community & Support",
+        "community_text": "Join our official communities for the latest announcements, technical sharing, and regular AMAs:",
+        "community_list_1": "Telegram / WeChat / Discord / Twitter / Facebook / Medium",
+        "community_list_3": "Support Email:",
+        /* FAQ */
+        "faq_title": "FAQ",
+        "faq_q1": "1. On which blockchain is TIKTOP built?",
+        "faq_a1": "Currently on Binance Smart Chain (BEP-20). We plan to explore more cross-chain mechanisms in the future.",
+        "faq_q2": "2. How can I acquire TIKTOP?",
+        "faq_a2": "You can purchase on officially announced exchanges or obtain it via ICO/private sales.",
+        "faq_q3": "3. What are the use cases for holding TIKTOP?",
+        "faq_a3": "TIKTOP can be used for transactions, staking, platform fee payments, or in future DApp ecosystems and other collaborations.",
+        /* Contact */
+        "contact_title": "Contact Us",
+        "contact_website_label": "Website:",
+        "contact_website": "https://www.tiktop.io",
+        "contact_email_label": "Email:",
+        "contact_email": "info@tiktop.io",
+        /* Footer */
+        "footer_back_to_top": "Back to Top",
+        "footer_copyright": "© 2025 TIKTOP Token. All rights reserved."
+      }
+    };
+
+    // 預設語系：簡體中文 (zh-cn)
+    let currentLang = "zh-cn";
+    const elementsWithI18n = document.querySelectorAll("[data-i18n]");
+    const langSwitcher = document.getElementById("langSwitcher");
+
+    // 切換語系
+    function setLanguage(lang) {
+      currentLang = lang;
+      const translation = translations[lang];
+      // 更新 <title> 
+      const titleEl = document.querySelector('title');
+      if (translation["page_title"]) {
+        titleEl.innerHTML = translation["page_title"];
+      }
+      // 更新帶有 data-i18n 的元素
+      elementsWithI18n.forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translation[key]) {
+          // 將翻譯文字寫入該元素
+          el.innerHTML = translation[key];
+        }
+      });
+    }
+
+    // 監聽下拉選單改變
+    langSwitcher.addEventListener("change", e => {
+      setLanguage(e.target.value);
+    });
+
+    // 頁面載入時，先套用預設語系
+    window.addEventListener("DOMContentLoaded", () => {
+      setLanguage(currentLang);
+    });
+
+    /**********************************************************
+     * Canvas 泡泡動畫
+     **********************************************************/
+    const canvas = document.getElementById('bubblefield');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const numBubbles = 100; 
+    const bubbles = [];
+
+    for (let i = 0; i < numBubbles; i++) {
+      const randomGreen = Math.floor(Math.random() * 56 + 200); 
+      const alpha = (Math.random() * 0.4 + 0.2).toFixed(2); 
+      bubbles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 10 + 3, 
+        speed: Math.random() * 0.5 + 0.2, 
+        drift: (Math.random() - 0.5) * 0.3, 
+        color: `rgba(150, ${randomGreen}, 180, ${alpha})`
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let bubble of bubbles) {
+        bubble.y -= bubble.speed;
+        bubble.x += bubble.drift;
+        // 若超出頂部或水平方向，重置泡泡位置
+        if (bubble.y + bubble.r < 0 || bubble.x < 0 || bubble.x > canvas.width) {
+          bubble.x = Math.random() * canvas.width;
+          bubble.y = canvas.height + bubble.r;
+        }
+        ctx.beginPath();
+        ctx.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2);
+        ctx.fillStyle = bubble.color;
+        ctx.fill();
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
