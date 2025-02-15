@@ -37,12 +37,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
-        radial-gradient(ellipse at top center, 
-                        rgba(130, 220, 180, 0.35) 0%, 
+      background:
+        radial-gradient(ellipse at top center,
+                        rgba(130, 220, 180, 0.35) 0%,
                         rgba(4, 59, 60, 0) 50%),
-        linear-gradient(to bottom, 
-                       rgba(38, 198, 218, 0.5) 0%, 
+        linear-gradient(to bottom,
+                       rgba(38, 198, 218, 0.5) 0%,
                        rgba(4, 59, 60, 1) 100%);
       background-blend-mode: screen;
       z-index: -3; /* 最底層 */
@@ -77,7 +77,6 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      /* 讓左中右三區塊 (logo / menu / language) 排列 */
       justify-content: space-between;
       position: relative;
     }
@@ -93,7 +92,7 @@
       flex: 0 0 auto; /* 不要被撐開 */
     }
     .logo img {
-      height: 40px;       
+      height: 40px;
       margin-right: 10px;
       vertical-align: middle;
     }
@@ -107,30 +106,23 @@
       border: none;
       color: #eee;
       transition: color 0.3s;
-      margin-left: 15px; /* 讓按鈕與選單間有點空隙 */
+      margin-left: 15px;
       flex: 0 0 auto;
     }
     .hamburger:hover {
       color: #fff;
     }
 
-    /* 選單：置於 LOGO 與語言切換之間，寬度自動填滿 (桌機) */
+    /* 選單：置於 LOGO 與語言切換之間 (桌機) */
     #navMenu {
-       list-style: none;      /* 移除預設的圓點 */
-       flex: 1 1 auto;
-       display: flex;
-       justify-content: center;
-       gap: 20px;
-       /* 其他設定... */
-
-
+      list-style: none;
       flex: 1 1 auto;
-      display: flex;       /* 桌機預設顯示 */
-      justify-content: center; /* 內容置中 */
-      gap: 20px;           /* 選單間距 */
+      display: flex;
+      justify-content: center;
+      gap: 20px;
     }
     #navMenu li a {
-      color: #eee;  
+      color: #eee;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
@@ -155,18 +147,16 @@
      * 手機版 (小於768px)
      ********************************************/
     @media (max-width: 768px) {
-      /* 顯示漢堡按鈕 */
       .hamburger {
         display: block;
       }
-      /* 選單預設隱藏 */
       #navMenu {
         display: none;
         position: absolute;
-        top: 60px; /* 往下，避免蓋到header */
+        top: 60px; /* 避免蓋到header */
         left: 0;
         right: 0;
-        flex-direction: column; /* 垂直 */
+        flex-direction: column;
         gap: 10px;
         background: rgba(0,0,0,0.8);
         padding: 20px;
@@ -180,13 +170,13 @@
      * Banner 區域
      ********************************************/
     #home {
-      position: relative; 
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 100px 20px;
-      overflow: hidden; 
+      overflow: hidden;
       text-align: center;
       background: linear-gradient(
         135deg,
@@ -247,7 +237,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      z-index: -1;           
+      z-index: -1;
       pointer-events: none;
     }
 
@@ -428,29 +418,19 @@
   <section id="distribution">
     <h2 data-i18n="distribution_title">代幣分配</h2>
     <p data-i18n="distribution_text">
-      為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配遵循以下原則：
+      為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配如下：
     </p>
+
+    <!-- ★ 這裡改成 市場（Market）： 20% & 公司（Company）： 80% ★ -->
     <div class="sub-section">
-      <h3 data-i18n="distribution_team_title">團隊（Team）：10% - 20%</h3>
-      <p data-i18n="distribution_team_text">
-        用於激勵核心成員與開發者，確保項目的長期推進與穩定運營。  
-        採用分階段解鎖機制，避免對市場造成過度壓力。
-      </p>
+      <h3 data-i18n="distribution_market_title">市場（Market）： 20%</h3>
+      <p data-i18n="distribution_market_text">確保核心成員有足夠的激勵。</p>
     </div>
     <div class="sub-section">
-      <h3 data-i18n="distribution_investors_title">投資者（Investors）：40% - 60%</h3>
-      <p data-i18n="distribution_investors_text">
-        ICO 或私募階段釋放的份額，提供投資者參與機會。  
-        保持適度流通性，以形成健康的交易生態。
-      </p>
+      <h3 data-i18n="distribution_company_title">公司（Company）： 80%</h3>
+      <p data-i18n="distribution_company_text">營運分配代幣政策調整。</p>
     </div>
-    <div class="sub-section">
-      <h3 data-i18n="distribution_ecofund_title">生態基金（Ecosystem Fund）：10% - 30%</h3>
-      <p data-i18n="distribution_ecofund_text">
-        用於支持長期技術研發、運營及合作夥伴激勵，並持續推動  
-        新應用場景開發及全球推廣活動。
-      </p>
-    </div>
+    
     <p><strong data-i18n="distribution_total">總發行量：1 億顆 TIKTOP 幣</strong></p>
   </section>
 
@@ -463,11 +443,11 @@
         能快速開發及部署去中心化應用。
       </li>
       <li data-i18n="technology_2">
-        <strong>可擴展性：</strong>採用 Binance Smart Chain 解決方案， 
+        <strong>可擴展性：</strong>採用 Binance Smart Chain 解決方案，
         確保高交易量時仍維持高速與低費用的特性。
       </li>
       <li data-i18n="technology_3">
-        <strong>隱私保護：</strong>支援敏感資訊加密存儲與選擇性公開，  
+        <strong>隱私保護：</strong>支援敏感資訊加密存儲與選擇性公開，
         兼顧透明度與用戶隱私。
       </li>
     </ul>
@@ -530,9 +510,17 @@
       加入官方社群，獲取最新公告、技術分享及定期 AMA 機會：
     </p>
     <ul>
-      <li data-i18n="community_list_1">Telegram / WeChat / Discord / Twitter / Facebook / Medium</li>
-      <li data-i18n="community_list_3">
-        客服信箱： <a href="mailto:info@tiktop.io" style="color:#fff;">info@tiktop.io</a>
+      <li>
+        Telegram：
+        <a href="https://t.me/TIKTOP@telegram" style="color:#fff;">
+          TIKTOP@telegram
+        </a>
+      </li>
+      <li>
+        <span data-i18n="community_list_3"></span>
+        <a href="mailto:trade@longfit.com.my" style="color:#fff;">
+          trade@longfit.com.my
+        </a>
       </li>
     </ul>
   </section>
@@ -542,16 +530,20 @@
     <h2 data-i18n="faq_title">常見問題</h2>
     <div class="faq-item">
       <h4 data-i18n="faq_q1">1. TIKTOP 幣是基於哪條公鏈？</h4>
-      <p data-i18n="faq_a1">目前基於 Binance Smart Chain 協議 (BEP-20)，後續將探索更多跨鏈機制。</p>
+      <p data-i18n="faq_a1">
+        目前基於 Binance Smart Chain 協議 (BEP-20)，後續將探索更多跨鏈機制。
+      </p>
     </div>
     <div class="faq-item">
       <h4 data-i18n="faq_q2">2. 如何購買 TIKTOP 幣？</h4>
-      <p data-i18n="faq_a2">可於官方公告的交易所，或參與 ICO/私募階段取得。</p>
+      <p data-i18n="faq_a2">
+        可於官方公告的交易所，或參與 ICO/私募階段取得。
+      </p>
     </div>
     <div class="faq-item">
       <h4 data-i18n="faq_q3">3. 持有 TIKTOP 幣有哪些用途？</h4>
       <p data-i18n="faq_a3">
-        可用於交易、抵押挖礦、支付平台費用等；亦可在未來 DApp 場景或其他合作  
+        可用於交易、抵押挖礦、支付平台費用等；亦可在未來 DApp 場景或其他合作
         項目中使用。
       </p>
     </div>
@@ -560,16 +552,23 @@
   <!-- 聯繫我們 -->
   <section id="contact">
     <h2 data-i18n="contact_title">聯繫我們</h2>
+
+    <!-- 官方網站 -->
     <p>
       <span data-i18n="contact_website_label">官方網站：</span>
-      <a href="https://www.tiktop.io" target="_blank" style="color:#fff;">
-        <span data-i18n="contact_website">https://www.tiktop.io</span>
+      <a href="https://www.longfit.com.my" target="_blank" style="color:#fff;">
+        <span data-i18n="contact_website">www.longfit.com.my</span>
       </a>
-      <br/>
-      <span data-i18n="contact_email_label">電子郵件：</span>
-      <a href="mailto:info@tiktop.io" style="color:#fff;">
-        <span data-i18n="contact_email">info@tiktop.io</span>
-      </a>
+    </p>
+    <!-- 公司名稱 -->
+    <p>
+      <span data-i18n="company_name_label">公司名稱：</span>
+      <span data-i18n="company_name">LONGFIT INTERNATIONAL SDN BHD</span>
+    </p>
+    <!-- 聯絡電話 -->
+    <p>
+      <span data-i18n="contact_phone_label">聯絡電話：</span>
+      <span data-i18n="contact_phone">+60348169683</span>
     </p>
   </section>
 
@@ -633,13 +632,11 @@
         "about_core_features_3": "應用廣泛：可用於支付、抵押挖礦、DApp 合作等。",
         /* Distribution */
         "distribution_title": "代幣分配",
-        "distribution_text": "為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配遵循以下原則：",
-        "distribution_team_title": "團隊（Team）：10% - 20%",
-        "distribution_team_text": "用於激勵核心成員與開發者，確保項目的長期推進與穩定運營。 採用分階段解鎖機制，避免對市場造成過度壓力。",
-        "distribution_investors_title": "投資者（Investors）：40% - 60%",
-        "distribution_investors_text": "ICO 或私募階段釋放的份額，提供投資者參與機會。 保持適度流通性，以形成健康的交易生態。",
-        "distribution_ecofund_title": "生態基金（Ecosystem Fund）：10% - 30%",
-        "distribution_ecofund_text": "用於支持長期技術研發、運營及合作夥伴激勵，並持續推動 新應用場景開發及全球推廣活動。",
+        "distribution_text": "為了確保生態系統健康與可持續發展，TIKTOP 幣的代幣分配如下：",
+        "distribution_market_title": "市場（Market）： 20%",
+        "distribution_market_text": "確保核心成員有足夠的激勵。",
+        "distribution_company_title": "公司（Company）： 80%",
+        "distribution_company_text": "營運分配代幣政策調整。",
         "distribution_total": "總發行量：1 億顆 TIKTOP 幣",
         /* Technology */
         "technology_title": "技術優勢",
@@ -685,9 +682,11 @@
         /* Contact */
         "contact_title": "聯繫我們",
         "contact_website_label": "官方網站：",
-        "contact_website": "https://www.tiktop.io",
-        "contact_email_label": "電子郵件：",
-        "contact_email": "info@tiktop.io",
+        "contact_website": "www.longfit.com.my",
+        "company_name_label": "公司名稱：",
+        "company_name": "LONGFIT INTERNATIONAL SDN BHD",
+        "contact_phone_label": "聯絡電話：",
+        "contact_phone": "+60348169683",
         /* Footer */
         "footer_back_to_top": "返回頂部",
         "footer_copyright": "© 2025 TIKTOP 幣. 保留所有權利."
@@ -720,13 +719,11 @@
         "about_core_features_3": "应用广泛：可用于支付、抵押挖矿、DApp 合作等。",
         /* Distribution */
         "distribution_title": "代币分配",
-        "distribution_text": "为了确保生态系统健康与可持续发展，TIKTOP 币的代币分配遵循以下原则：",
-        "distribution_team_title": "团队（Team）：10% - 20%",
-        "distribution_team_text": "用于激励核心成员与开发者，确保项目的长期推进与稳定运营。 采用分阶段解锁机制，避免对市场造成过度压力。",
-        "distribution_investors_title": "投资者（Investors）：40% - 60%",
-        "distribution_investors_text": "ICO 或私募阶段释放的份额，提供投资者参与机会。 保持适度流通性，以形成健康的交易生态。",
-        "distribution_ecofund_title": "生态基金（Ecosystem Fund）：10% - 30%",
-        "distribution_ecofund_text": "用于支持长期技术研发、运营及合作伙伴激励，并持续推动 新应用场景开发及全球推广活动。",
+        "distribution_text": "为了确保生态系统健康与可持续发展，TIKTOP 币的代币分配如下：",
+        "distribution_market_title": "市场（Market）： 20%",
+        "distribution_market_text": "确保核心成员有足够的激励。",
+        "distribution_company_title": "公司（Company）： 80%",
+        "distribution_company_text": "运营分配代币政策调整。",
         "distribution_total": "总发行量：1 亿枚 TIKTOP 币",
         /* Technology */
         "technology_title": "技术优势",
@@ -772,9 +769,11 @@
         /* Contact */
         "contact_title": "联系我们",
         "contact_website_label": "官方网站：",
-        "contact_website": "https://www.tiktop.io",
-        "contact_email_label": "电子邮件：",
-        "contact_email": "info@tiktop.io",
+        "contact_website": "www.longfit.com.my",
+        "company_name_label": "公司名称：",
+        "company_name": "LONGFIT INTERNATIONAL SDN BHD",
+        "contact_phone_label": "联系电话：",
+        "contact_phone": "+60348169683",
         /* Footer */
         "footer_back_to_top": "返回顶部",
         "footer_copyright": "© 2025 TIKTOP 币. 保留所有权利."
@@ -807,13 +806,11 @@
         "about_core_features_3": "Broad Utility: usable for payments, staking, and various DApp collaborations.",
         /* Distribution */
         "distribution_title": "Token Distribution",
-        "distribution_text": "To ensure a healthy and sustainable ecosystem, TIKTOP’s token distribution follows these principles:",
-        "distribution_team_title": "Team: 10% - 20%",
-        "distribution_team_text": "Allocated to incentivize core members and developers, ensuring the long-term progress of the project. Implement a vesting schedule to avoid excessive market pressure.",
-        "distribution_investors_title": "Investors: 40% - 60%",
-        "distribution_investors_text": "Released during ICO or private sales, providing opportunities for investors. Maintain appropriate liquidity for a healthy trading environment.",
-        "distribution_ecofund_title": "Ecosystem Fund: 10% - 30%",
-        "distribution_ecofund_text": "Supports long-term R&D, operations, and partner incentives, continuously fostering new application scenarios and global promotion.",
+        "distribution_text": "To ensure a healthy and sustainable ecosystem, TIKTOP’s token distribution is as follows:",
+        "distribution_market_title": "Market (20%)",
+        "distribution_market_text": "Ensures enough incentives for core members.",
+        "distribution_company_title": "Company (80%)",
+        "distribution_company_text": "Operational token distribution policy adjustments.",
         "distribution_total": "Total Supply: 100 million TIKTOP",
         /* Technology */
         "technology_title": "Technology",
@@ -859,25 +856,25 @@
         /* Contact */
         "contact_title": "Contact Us",
         "contact_website_label": "Website:",
-        "contact_website": "https://www.tiktop.io",
-        "contact_email_label": "Email:",
-        "contact_email": "info@tiktop.io",
+        "contact_website": "www.longfit.com.my",
+        "company_name_label": "Company Name:",
+        "company_name": "LONGFIT INTERNATIONAL SDN BHD",
+        "contact_phone_label": "Phone:",
+        "contact_phone": "+60348169683",
         /* Footer */
         "footer_back_to_top": "Back to Top",
         "footer_copyright": "© 2025 TIKTOP Token. All rights reserved."
       }
     };
 
-    // 預設語系：簡體中文 (zh-cn)
     let currentLang = "zh-cn";
     const elementsWithI18n = document.querySelectorAll("[data-i18n]");
     const langSwitcher = document.getElementById("langSwitcher");
 
-    // 切換語系
     function setLanguage(lang) {
       currentLang = lang;
       const translation = translations[lang];
-      // 更新 <title> 
+      // 更新 <title>
       const titleEl = document.querySelector('title');
       if (translation["page_title"]) {
         titleEl.innerHTML = translation["page_title"];
@@ -914,18 +911,18 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    const numBubbles = 100; 
+    const numBubbles = 100;
     const bubbles = [];
 
     for (let i = 0; i < numBubbles; i++) {
-      const randomGreen = Math.floor(Math.random() * 56 + 200); 
-      const alpha = (Math.random() * 0.4 + 0.2).toFixed(2); 
+      const randomGreen = Math.floor(Math.random() * 56 + 200);
+      const alpha = (Math.random() * 0.4 + 0.2).toFixed(2);
       bubbles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 10 + 3, 
-        speed: Math.random() * 0.5 + 0.2, 
-        drift: (Math.random() - 0.5) * 0.3, 
+        r: Math.random() * 10 + 3,
+        speed: Math.random() * 0.5 + 0.2,
+        drift: (Math.random() - 0.5) * 0.3,
         color: `rgba(150, ${randomGreen}, 180, ${alpha})`
       });
     }
